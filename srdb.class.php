@@ -554,9 +554,9 @@ class icit_srdb {
 
 			while ( $table = $this->db_fetch( $all_tables_mysql ) ) {
 				// ignore views
-				if ( $table[ 'Comment' ] == 'VIEW' )
-					continue;
-
+				if ( $table[ 'Comment' ] == 'VIEW' ) {
+                    break;
+                }
 				$all_tables[ $table[0] ] = $table;
 			}
 
@@ -858,7 +858,7 @@ class icit_srdb {
 					case 'utf32':
 						//$encoding = 'utf8';
 						$this->add_error( "The table \"{$table}\" is encoded using \"{$encoding}\" which is currently unsupported.", 'results' );
-						continue;
+						break;
 						break;
 
 					default:
@@ -874,7 +874,7 @@ class icit_srdb {
 				
 				if ( $primary_key === null || empty( $primary_key ) ) {
 					$this->add_error( "The table \"{$table}\" has no primary key. Changes will have to be made manually.", 'results' );
-					continue;
+					break;
 				}
 				
 				// create new table report instance
@@ -916,16 +916,16 @@ class icit_srdb {
 
 							if ( in_array( $column, $primary_key ) ) {
 								$where_sql[] = "`{$column}` = " . $this->db_escape( $data_to_fix );
-								continue;
+								break;
 							}
 
 							// exclude cols
 							if ( in_array( $column, $this->exclude_cols ) )
-								continue;
+								break;
 
 							// include cols
 							if ( ! empty( $this->include_cols ) && ! in_array( $column, $this->include_cols ) )
-								continue;
+								break;
 							
 							// Run a search replace on the data that'll respect the serialisation.
 							$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
@@ -1058,7 +1058,7 @@ class icit_srdb {
 						$this->add_error( $this->db_error( ), 'results' );
 					else
 						$report[ 'converted' ][ $table ] = true;
-					continue;
+					break;
 				} else {
 					$report[ 'converted' ][ $table ] = false;
 				}
@@ -1112,7 +1112,7 @@ class icit_srdb {
 						$this->add_error( $this->db_error( ), 'results' );
 					else
 						$report[ 'converted' ][ $table ] = true;
-					continue;
+					break;
 				} else {
 					$report[ 'converted' ][ $table ] = false;
 				}
